@@ -29,34 +29,34 @@ class WifiService {
 
     return wifiList;
   }
+static Future<void> sendWifiDataToApi(List<WifiModel> wifiList) async {
+  const apiUrl = 'http://192.168.166.38:5000/';
 
-  static Future<void> sendWifiDataToApi(List<WifiModel> wifiList) async {
-    const apiUrl = 'https://your-api-endpoint.com/upload';
+  try {
+    // Convert the list to JSON
+    List<Map<String, dynamic>> jsonData = wifiList.map((wifi) {
+      return {
+        'name': wifi.name,
+        'signalStrength': wifi.signalStrength,
+      };
+    }).toList();
 
-    try {
-      // Convert the list to JSON
-      List<Map<String, dynamic>> jsonData = wifiList.map((wifi) {
-        return {
-          'name': wifi.name,
-          'signalStrength': wifi.signalStrength,
-        };
-      }).toList();
+    // Make the POST request with the correct key
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'wifi_devices': jsonData}), // Fixed key
+    );
 
-      // Make the POST request
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'wifiNetworks': jsonData}),
-      );
-
-      if (response.statusCode == 200) {
-        print('Wi-Fi data sent successfully!');
-      } else {
-        print('Failed to send Wi-Fi data. Status code: ${response.statusCode}');
-        print('Response: ${response.body}');
-      }
-    } catch (e) {
-      print('Error sending Wi-Fi data to API: $e');
+    if (response.statusCode == 200) {
+      print('Wi-Fi data sent successfully!');
+    } else {
+      print('Failed to send Wi-Fi data. Status code: ${response.statusCode}');
+      print('Response: ${response.body}');
     }
+  } catch (e) {
+    print('Error sending Wi-Fi data to API: $e');
   }
+}
+
 }

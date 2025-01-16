@@ -42,10 +42,10 @@ class _WifiListScreenState extends State<WifiListScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to send Wi-Fi data: $e')),
       );
+      print('Error sending Wi-Fi data: $e');
     }
   }
 
-  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,22 +55,22 @@ class _WifiListScreenState extends State<WifiListScreen> {
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : wifiList.isEmpty
-          ? Center(child: Text('No Wi-Fi networks found.'))
-          : ListView.builder(
-        itemCount: wifiList.length,
-        itemBuilder: (context, index) {
-          final wifi = wifiList[index];
-          return ListTile(
-            leading: Icon(Icons.wifi, color: Colors.blue),
-            title: Text(wifi.name),
-            subtitle: Text('Signal Strength: ${wifi.signalStrength} dBm'),
-          );
-        },
-      ),
+              ? Center(child: Text('No Wi-Fi networks found.'))
+              : ListView.builder(
+                  itemCount: wifiList.length,
+                  itemBuilder: (context, index) {
+                    final wifi = wifiList[index];
+                    return ListTile(
+                      leading: Icon(Icons.wifi, color: Colors.blue),
+                      title: Text(wifi.name),
+                      subtitle: Text('Signal Strength: ${wifi.signalStrength} dBm'),
+                    );
+                  },
+                ),
       floatingActionButton: FloatingActionButton(
-        onPressed: sendWifiData, // Call the sendWifiData method when clicked
-        child: Icon(Icons.send), // Icon for the button
-        tooltip: 'Send Wi-Fi Data', // Tooltip message when hovered or long-pressed
+        onPressed: sendWifiData,
+        child: Icon(Icons.send),
+        tooltip: 'Send Wi-Fi Data',
       ),
     );
   }
