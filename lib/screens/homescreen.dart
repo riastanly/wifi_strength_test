@@ -18,7 +18,8 @@ class HomeScreen extends StatelessWidget {
           },
           child: Text(
             'FIRE DETECTED',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+            style: TextStyle(
+                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,

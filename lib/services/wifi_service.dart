@@ -29,34 +29,51 @@ class WifiService {
 
     return wifiList;
   }
-static Future<void> sendWifiDataToApi(List<WifiModel> wifiList) async {
-  const apiUrl = 'http://192.168.166.38:5000/';
 
-  try {
-    // Convert the list to JSON
-    List<Map<String, dynamic>> jsonData = wifiList.map((wifi) {
-      return {
-        'name': wifi.name,
-        'signalStrength': wifi.signalStrength,
-      };
-    }).toList();
+  static Future<void> sendWifiDataToApi(List<WifiModel> wifiList) async {
+    const apiUrl = 'http://192.168.48.224:5000/';
 
-    // Make the POST request with the correct key
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'wifi_devices': jsonData}), // Fixed key
-    );
+    try {
+      // Convert the list to JSON
+      List<Map<String, dynamic>> jsonData = wifiList.map((wifi) {
+        return {
+          'name': wifi.name,
+          'signalStrength': wifi.signalStrength,
+        };
+      }).toList();
 
-    if (response.statusCode == 200) {
-      print('Wi-Fi data sent successfully!');
-    } else {
-      print('Failed to send Wi-Fi data. Status code: ${response.statusCode}');
-      print('Response: ${response.body}');
+      // Make the POST request with the correct key
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'wifi_devices': jsonData}), // Fixed key
+      );
+
+      if (response.statusCode == 200) {
+        print('Wi-Fi data sent successfully!');
+      } else {
+        print('Failed to send Wi-Fi data. Status code: ${response.statusCode}');
+        print('Response: ${response.body}');
+      }
+    } catch (e) {
+      print('Error sending Wi-Fi data to API: $e');
     }
-  } catch (e) {
-    print('Error sending Wi-Fi data to API: $e');
   }
-}
 
+  static Future<Map<String, dynamic>> recieveResultfromApi() async {
+    const apiUrl = 'http://192.168.48.224:5000/result';
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['data'];
+      } else {
+        throw Exception('Failed to receive result: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
 }

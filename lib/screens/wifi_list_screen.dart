@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wifi_strength_test/screens/ResultScreen.dart';
 import '../services/wifi_service.dart';
 import '../models/wifi_model.dart';
 
@@ -38,6 +39,20 @@ class _WifiListScreenState extends State<WifiListScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Wi-Fi data sent to the server!')),
       );
+
+      // Fetch the result from the API
+      final result = await WifiService.recieveResultfromApi();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Result received from the server!')),
+      );
+
+      // Navigate to ResultScreen
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ResultScreen(result: result),
+        ),
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to send Wi-Fi data: $e')),
@@ -63,7 +78,8 @@ class _WifiListScreenState extends State<WifiListScreen> {
                     return ListTile(
                       leading: Icon(Icons.wifi, color: Colors.blue),
                       title: Text(wifi.name),
-                      subtitle: Text('Signal Strength: ${wifi.signalStrength} dBm'),
+                      subtitle:
+                          Text('Signal Strength: ${wifi.signalStrength} dBm'),
                     );
                   },
                 ),
