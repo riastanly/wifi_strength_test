@@ -4,6 +4,7 @@ import 'package:wifi_iot/wifi_iot.dart';
 import '../models/wifi_model.dart';
 
 class WifiService {
+  static final apiUrl = 'http://192.168.48.224:5000/';
   static Future<List<WifiModel>> getNearbyWifi() async {
     List<WifiModel> wifiList = [];
 
@@ -31,8 +32,6 @@ class WifiService {
   }
 
   static Future<void> sendWifiDataToApi(List<WifiModel> wifiList) async {
-    const apiUrl = 'http://192.168.48.224:5000/';
-
     try {
       // Convert the list to JSON
       List<Map<String, dynamic>> jsonData = wifiList.map((wifi) {
@@ -61,10 +60,10 @@ class WifiService {
   }
 
   static Future<Map<String, dynamic>> recieveResultfromApi() async {
-    const apiUrl = 'http://192.168.48.224:5000/result';
+    final api = '${apiUrl}result';
 
     try {
-      final response = await http.get(Uri.parse(apiUrl));
+      final response = await http.get(Uri.parse(api));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
